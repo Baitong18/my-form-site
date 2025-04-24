@@ -50,15 +50,16 @@
 
       fetch(scriptURL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'  // กำหนด type ของข้อมูลที่ส่งไป
-        },
-        body: JSON.stringify(data)
+        body: formData
       })
       .then(response => {
-        window.location.href = 'thankyou.html'; // ส่งไปหน้า Thank You
+        if (response.ok) {
+          window.location.href = 'thankyou.html';
+        } else {
+          alert("Failed to submit: " + response.statusText);
+        }
       })
-      .catch(error => alert("Error: " + error.message));
+      .catch(error => alert("Error: " + error));
     });
   </script>
 </body>
