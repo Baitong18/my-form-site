@@ -40,10 +40,33 @@ form.addEventListener('submit', e => {
   submitButton.disabled = true;
   submitButton.textContent = "Submitting...";
 
-  // ส่ง FormData ตรงๆ โดยไม่ต้องแปลง
+  // เก็บค่าจากฟอร์มแบบถูกต้อง
+  const formData = new FormData(form);
+  const data = {};
+  
+  // เก็บค่า checkbox แยกต่างหาก
+  const topics = [];
+  
+  for (const [key, value] of formData.entries()) {
+    if (key === 'topics[]') {
+      topics.push(value);
+    } else {
+      data[key] = value;
+    }
+  }
+  
+  // เพิ่ม topics เข้าไปใน data
+  if (topics.length > 0) {
+    data['topics'] = topics;
+  }
+
+  // ส่งข้อมูลในรูปแบบที่ GAS รับได้
   fetch(scriptURL, {
     method: 'POST',
-    body: new FormData(form),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams(data).toString(),
     mode: 'no-cors'
   })
   .then(() => {
