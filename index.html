@@ -2,93 +2,212 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Adobe Interest Form</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
-    label { display: block; margin: 10px 0; }
-    input[type="text"], input[type="email"], input[type="tel"] { width: 100%; padding: 8px; }
-    button { background: #0066cc; color: white; border: none; padding: 10px 20px; cursor: pointer; }
-    button:disabled { background: #cccccc; }
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      color: #333;
+    }
+    h1 {
+      color: #0066cc;
+      text-align: center;
+    }
+    form {
+      background: #f9f9f9;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    fieldset {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    legend {
+      font-weight: bold;
+      padding: 0 10px;
+    }
+    button {
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0052a3;
+    }
+    button:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    .privacy {
+      font-size: 14px;
+      margin-top: 20px;
+      color: #666;
+    }
+    .error {
+      color: #d32f2f;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
   <h1>Adobe Interest Form</h1>
+  
   <form id="adobeForm">
-    <label>First Name: <input type="text" name="firstName" required></label>
-    <label>Last Name: <input type="text" name="lastName" required></label>
-    <label>Email: <input type="email" name="email" required></label>
-    <label>Mobile Phone: <input type="tel" name="phone" required></label>
-    <label>Company Name: <input type="text" name="company" required></label>
-    <label>Job Title: <input type="text" name="jobTitle" required></label>
-
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" required>
+    
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" required>
+    
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    
+    <label for="phone">Mobile Phone:</label>
+    <input type="tel" id="phone" name="phone" required>
+    
+    <label for="company">Company Name:</label>
+    <input type="text" id="company" name="company" required>
+    
+    <label for="jobTitle">Job Title:</label>
+    <input type="text" id="jobTitle" name="jobTitle" required>
+    
     <fieldset>
-      <legend>Would you be interested in any of the following topics (Select all that apply):</legend>
-      <label><input type="checkbox" name="topics" value="Customer Journey Orchestration"> Customer Journey Orchestration</label>
-      <label><input type="checkbox" name="topics" value="Content Supply Chain & Automation"> Content Supply Chain & Automation</label>
-      <label><input type="checkbox" name="topics" value="Data-Driven Marketing"> Data-Driven Marketing</label>
-      <label><input type="checkbox" name="topics" value="Commerce & Personalization"> Commerce & Personalization</label>
-      <label><input type="checkbox" name="topics" value="Customer Data Platform (CDP)"> Customer Data Platform (CDP)</label>
-      <label><input type="checkbox" name="topics" value="Generative AI in Digital Experience"> Generative AI in Digital Experience</label>
-      <label><input type="checkbox" name="topics" value="Not at the moment"> Not at the moment</label>
+      <legend>Would you be interested in any of the following topics? (Select all that apply)</legend>
+      
+      <label>
+        <input type="checkbox" name="topics" value="Customer Journey Orchestration">
+        Customer Journey Orchestration – Delivering personalized experiences across multiple channels
+      </label><br>
+      
+      <label>
+        <input type="checkbox" name="topics" value="Content Supply Chain & Automation">
+        Content Supply Chain & Automation – Scaling content creation and delivery efficiently
+      </label><br>
+      
+      <label>
+        <input type="checkbox" name="topics" value="Data-Driven Marketing">
+        Data-Driven Marketing – Leveraging AI and data insights to enhance customer engagement
+      </label><br>
+      
+      <label>
+        <input type="checkbox" name="topics" value="Commerce & Personalization">
+        Commerce & Personalization – Driving revenue growth with AI-powered recommendations
+      </label><br>
+      
+      <label>
+        <input type="checkbox" name="topics" value="Customer Data Platform (CDP)">
+        Customer Data Platform (CDP) – Unifying customer data for better targeting and segmentation
+      </label><br>
+      
+      <label>
+        <input type="checkbox" name="topics" value="Generative AI in Digital Experience">
+        Generative AI in Digital Experience – Exploring use cases and best practices
+      </label><br>
+      
+      <label>
+        <input type="checkbox" name="topics" value="Not at the moment">
+        Not at the moment
+      </label>
     </fieldset>
-
-    <p>
-      By supplying my contact information, I authorise the Adobe family of companies to contact me with personalised communications about Adobe's products and services.  
-      See our <a href="https://www.adobe.com/privacy.html" target="_blank">Privacy Policy</a> for more details or to opt-out at any time.
-    </p>
-
-    <button type="submit">Submit</button>
+    
+    <div class="privacy">
+      <p>
+        By supplying my contact information, I authorize the Adobe family of companies to contact me with personalized communications about Adobe's products and services.  
+        See our <a href="https://www.adobe.com/privacy.html" target="_blank">Privacy Policy</a> for more details or to opt-out at any time.
+      </p>
+    </div>
+    
+    <button type="submit" id="submitBtn">Submit</button>
+    <div id="errorMsg" class="error"></div>
   </form>
 
-<script>
-const scriptURL = 'https://script.google.com/macros/s/AKfycbx5Io0FxAJdwif6ZLFMJhGu4uBq3K_sncYQwoA0aBWxiR_dzNah0VRICRVMEDXYr1Fzag/exec';
-const form = document.getElementById('adobeForm');
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbx5Io0FxAJdwif6ZLFMJhGu4uBq3K_sncYQwoA0aBWxiR_dzNah0VRICRVMEDXYr1Fzag/exec';
+    const form = document.getElementById('adobeForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorMsg = document.getElementById('errorMsg');
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const submitButton = form.querySelector('button[type="submit"]');
-  
-  try {
-    submitButton.disabled = true;
-    submitButton.textContent = "Submitting...";
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.textContent = '';
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
 
-    // เก็บค่าจากฟอร์ม
-    const formData = new FormData(form);
-    const data = {
-      firstName: formData.get('firstName'),
-      lastName: formData.get('lastName'),
-      email: formData.get('email'),
-      phone: formData.get('phone'),
-      company: formData.get('company'),
-      jobTitle: formData.get('jobTitle'),
-      topics: Array.from(formData.getAll('topics')) // เก็บทุกค่าที่เลือก
-    };
+      try {
+        // Collect form data
+        const formData = new FormData(form);
+        const data = {
+          firstName: formData.get('firstName'),
+          lastName: formData.get('lastName'),
+          email: formData.get('email'),
+          phone: formData.get('phone'),
+          company: formData.get('company'),
+          jobTitle: formData.get('jobTitle'),
+          topics: formData.getAll('topics')
+        };
 
-    // ส่งข้อมูล
-    const response = await fetch(scriptURL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
+        console.log('Form data to submit:', data);
+
+        // Send data to Google Apps Script
+        const response = await fetch(scriptURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          const errorResponse = await response.text();
+          throw new Error(`Server responded with status ${response.status}: ${errorResponse}`);
+        }
+
+        const result = await response.json();
+        console.log('Submission result:', result);
+
+        if (result.status === 'error') {
+          throw new Error(result.error || 'Unknown server error');
+        }
+
+        // Show success message
+        alert('Thank you for your submission! We will contact you soon.');
+        form.reset();
+      } catch (error) {
+        console.error('Submission error:', error);
+        errorMsg.textContent = `Error: ${error.message}. Please try again or contact support.`;
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit";
+      }
     });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const result = await response.text();
-    console.log('Success:', result);
-    alert("Thank you for your submission!");
-    form.reset();
-  } catch (error) {
-    console.error('Error:', error);
-    alert("Submission failed. Please try again later.");
-  } finally {
-    submitButton.disabled = false;
-    submitButton.textContent = "Submit";
-  }
-});
-</script>
+  </script>
 </body>
 </html>
