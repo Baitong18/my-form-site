@@ -51,25 +51,27 @@ form.addEventListener('submit', e => {
     topics: formData.getAll('topics[]') // ใช้ getAll สำหรับ checkbox
   };
 
-  fetch(scriptURL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data)
-  })
-  .then(response => {
-    if (!response.ok) throw new Error('Network response was not ok');
-    return response.text();
-  })
-  .then(text => {
-    alert("Thank you for your submission!");
-    form.reset();
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    alert("Error: " + error.message);
-  })
+fetch(scriptURL, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(data)
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return response.text();
+})
+.then(text => {
+  console.log('Success:', text);
+  alert("Submission successful!");
+})
+.catch(error => {
+  console.error('Error:', error);
+  alert("Submission failed: " + error.message);
+});
   .finally(() => {
     submitButton.disabled = false;
     submitButton.textContent = "Submit";
