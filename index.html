@@ -30,53 +30,63 @@
     <button type="submit">Submit</button>
   </form>
 
-  <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbx5Io0FxAJdwif6ZLFMJhGu4uBq3K_sncYQwoA0aBWxiR_dzNah0VRICRVMEDXYr1Fzag/exec'; // ใส่ URL ของ Google Apps Script ที่ได้จากขั้นตอนก่อนหน้านี้
-    const form = document.getElementById('adobeForm');
+    <script>
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbx5Io0FxAJdwif6ZLFMJhGu4uBq3K_sncYQwoA0aBWxiR_dzNah0VRICRVMEDXYr1Fzag/exec';
+      const form = document.getElementById('adobeForm');
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
+      form.addEventListener('submit', e => {
+        e.preventDefault();
 
-      const submitButton = form.querySelector('button[type="submit"]');
-      submitButton.disabled = true;
-      submitButton.textContent = "Submitting...";
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = "Submitting...";
 
-      // ดึงข้อมูลจากฟอร์ม
-      const formData = new FormData(form);
+        // ดึงข้อมูลจากฟอร์ม
+        const formData = new FormData(form);
     
-      // แปลงข้อมูลจาก FormData เป็น query string
-      const formDataObject = {};
-      formData.forEach((value, key) => {
-        if (key === 'topics') {
-          // ตรวจสอบว่ามีการเลือกหลาย checkbox หรือไม่
-          if (!formDataObject[key]) {
-            formDataObject[key] = [];
+        // สร้าง object สำหรับเก็บข้อมูล
+        const data = {};
+    
+        // เก็บค่า checkbox ไว้ใน array
+        const topics = [];
+    
+        // วนลูปผ่าน formData
+        for (const [key, value] of formData.entries()) {
+          if (key === 'topics') {
+            topics.push(value);
+          } else {
+            data[key] = value;
           }
-          formDataObject[key].push(value);
-        } else {
-          formDataObject[key] = value;
         }
-      });
+    
+        // ถ้ามีการเลือก topics ให้เพิ่มเข้าไปใน data
+        if (topics.length > 0) {
+          data.topics = topics;
+        }
 
-      // แปลง formDataObject เป็น query string
-      const formDataParams = new URLSearchParams(formDataObject).toString();
-
-      // ส่งข้อมูลไปยัง Google Apps Script
-      fetch(scriptURL, {
+        // ส่งข้อมูลไปยัง Google Apps Script
+        fetch(scriptURL, {
         method: 'POST',
-        body: formDataParams
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams(data).toString()
       })
       .then(response => {
         if (response.ok) {
-          window.location.href = 'thankyou.html';  // แสดงหน้า thank you เมื่อส่งข้อมูลสำเร็จ
+          return response.text();
+        }
+        throw new Error('Network response was not ok.');
+      })
+      .then(responseText => {
+        if (responseText === "Success") {
+          window.location.href = 'thankyou.html';
         } else {
-          alert("Failed to submit: " + response.statusText);
-          submitButton.disabled = false;
-          submitButton.textContent = "Submit";
+          throw new Error(responseText);
         }
       })
       .catch(error => {
-        alert("Error: " + error);
+        alert("Error: " + error.message);
         submitButton.disabled = false;
         submitButton.textContent = "Submit";
       });
