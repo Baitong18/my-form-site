@@ -2,34 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Custom Form</title>
+  <title>Adobe Interest Form</title>
 </head>
 <body>
-  <form id="contact-form">
-    <input name="firstName" placeholder="First name" required>
-    <input name="lastName" placeholder="Last name" required>
-    <input name="email" type="email" placeholder="Business email" required>
-    <button type="submit">Submit</button>
+  <form id="adobeForm">
+    <label>First Name: <input type="text" name="firstName" required></label><br>
+    <label>Last Name: <input type="text" name="lastName" required></label><br>
+    <label>Email: <input type="email" name="email" required></label><br>
+    <label>Mobile Phone: <input type="tel" name="phone" required></label><br>
+    <label>Company Name: <input type="text" name="company" required></label><br>
+    <label>Job Title: <input type="text" name="jobTitle" required></label><br>
 
-    <div class="footer-note">
-      By supplying my contact information, I authorise the Adobe family of companies...
-    </div>
+    <p>Would you be interested in any of the following topics (Select all that apply):</p>
+    <label><input type="checkbox" name="topics" value="Customer Journey Orchestration – Delivering personalized experiences across multiple channels"> Customer Journey Orchestration</label><br>
+    <label><input type="checkbox" name="topics" value="Content Supply Chain & Automation – Scaling content creation and delivery efficiently"> Content Supply Chain & Automation</label><br>
+    <label><input type="checkbox" name="topics" value="Data-Driven Marketing – Leveraging AI and data insights to enhance customer engagement"> Data-Driven Marketing</label><br>
+    <label><input type="checkbox" name="topics" value="Commerce & Personalization – Driving revenue growth with AI-powered recommendations"> Commerce & Personalization</label><br>
+    <label><input type="checkbox" name="topics" value="Customer Data Platform (CDP) – Unifying customer data for better targeting and segmentation"> Customer Data Platform (CDP)</label><br>
+    <label><input type="checkbox" name="topics" value="Generative AI in Digital Experience – Exploring use cases and best practices"> Generative AI in Digital Experience</label><br>
+    <label><input type="checkbox" name="topics" value="Not at the moment"> Not at the moment</label><br><br>
+
+    <p>
+      By supplying my contact information, I authorise the Adobe family of companies to contact me with personalised communications about Adobe’s products and services.  
+      See our <a href="https://www.adobe.com/privacy.html" target="_blank">Privacy Policy</a> for more details or to opt-out at any time.
+    </p>
+
+    <button type="submit">Submit</button>
   </form>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbx5Io0FxAJdwif6ZLFMJhGu4uBq3K_sncYQwoA0aBWxiR_dzNah0VRICRVMEDXYr1Fzag/exec';
-    const form = document.getElementById('contact-form');
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbx5Io0FxAJdwif6ZLFMJhGu4uBq3K_sncYQwoA0aBWxiR_dzNah0VRICRVMEDXYr1Fzag/exec'; // แทนที่ด้วย URL ที่ได้จากขั้นตอน Google Apps Script
+    const form = document.getElementById('adobeForm');
 
     form.addEventListener('submit', e => {
       e.preventDefault();
-      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-      .then(response => {
-        if (response.ok) {
-          window.location.href = 'thankyou.html'; // ✅ เด้งไปหน้า Thank You เมื่อส่งสำเร็จจริง
-        } else {
-          console.error('Submit failed. Status:', response.status);
-        }
+
+      const formData = new FormData(form);
+      const data = {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        company: formData.get('company'),
+        jobTitle: formData.get('jobTitle'),
+        topics: formData.getAll('topics')
+      };
+
+      fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify(data)
       })
+      .then(response => alert("Form submitted successfully!"))
+      .catch(error => alert("Error: " + error.message));
+    });
   </script>
 </body>
 </html>
