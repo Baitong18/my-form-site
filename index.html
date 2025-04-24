@@ -40,9 +40,17 @@ form.addEventListener('submit', e => {
   submitButton.disabled = true;
   submitButton.textContent = "Submitting...";
 
-  // สร้าง URLSearchParams จาก FormData โดยตรง
-  const formData = new FormData(form);
-  const urlEncoded = new URLSearchParams();
+// แทนที่ส่วน fetch ด้วยวิธีนี้
+const formData = new FormData(form);
+const data = {
+  firstName: formData.get('firstName'),
+  lastName: formData.get('lastName'),
+  email: formData.get('email'),
+  phone: formData.get('phone'),
+  company: formData.get('company'),
+  jobTitle: formData.get('jobTitle'),
+  topics: formData.getAll('topics[]') // ใช้ getAll สำหรับ checkbox
+};
   
   // เพิ่มค่าแต่ละ field
   for (const [key, value] of formData.entries()) {
@@ -54,11 +62,14 @@ form.addEventListener('submit', e => {
     }
   }
 
-  fetch(scriptURL, {
-    method: 'POST',
-    body: urlEncoded,
-    mode: 'no-cors'
-  })
+fetch(scriptURL, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(data),
+  mode: 'no-cors'
+})
   .then(() => {
     alert("Thank you for your submission!");
     form.reset();
