@@ -31,7 +31,7 @@
   </form>
 
   <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbx5Io0FxAJdwif6ZLFMJhGu4uBq3K_sncYQwoA0aBWxiR_dzNah0VRICRVMEDXYr1Fzag/exec'; // แทนที่ด้วย URL ที่ได้จากขั้นตอน Google Apps Script
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbx5Io0FxAJdwif6ZLFMJhGu4uBq3K_sncYQwoA0aBWxiR_dzNah0VRICRVMEDXYr1Fzag/exec'; // ใส่ URL ของ Google Apps Script ที่ได้จากขั้นตอนก่อนหน้านี้
     const form = document.getElementById('adobeForm');
 
     form.addEventListener('submit', e => {
@@ -45,17 +45,21 @@
         phone: formData.get('phone'),
         company: formData.get('company'),
         jobTitle: formData.get('jobTitle'),
-        topics: formData.getAll('topics')
+        topics: formData.getAll('topics') // รับค่าจากหลาย checkbox
       };
 
       fetch(scriptURL, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'  // กำหนด type ของข้อมูลที่ส่งไป
+        },
         body: JSON.stringify(data)
       })
       .then(response => {
         window.location.href = 'thankyou.html'; // ส่งไปหน้า Thank You
       })
       .catch(error => alert("Error: " + error.message));
+    });
   </script>
 </body>
 </html>
