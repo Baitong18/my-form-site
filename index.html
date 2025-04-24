@@ -37,16 +37,11 @@
     form.addEventListener('submit', e => {
       e.preventDefault();
 
+      const submitButton = form.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = "Submitting...";
+
       const formData = new FormData(form);
-      const data = {
-        firstName: formData.get('firstName'),
-        lastName: formData.get('lastName'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
-        company: formData.get('company'),
-        jobTitle: formData.get('jobTitle'),
-        topics: formData.getAll('topics') // รับค่าจากหลาย checkbox
-      };
 
       fetch(scriptURL, {
         method: 'POST',
@@ -57,9 +52,15 @@
           window.location.href = 'thankyou.html';
         } else {
           alert("Failed to submit: " + response.statusText);
+          submitButton.disabled = false;
+          submitButton.textContent = "Submit";
         }
       })
-      .catch(error => alert("Error: " + error));
+      .catch(error => {
+        alert("Error: " + error);
+        submitButton.disabled = false;
+        submitButton.textContent = "Submit";
+      });
     });
   </script>
 </body>
