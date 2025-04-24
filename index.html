@@ -43,7 +43,7 @@
 
       // ดึงข้อมูลจากฟอร์ม
       const formData = new FormData(form);
-  
+    
       // แปลงข้อมูลจาก FormData เป็น query string
       const formDataObject = {};
       formData.forEach((value, key) => {
@@ -68,7 +68,7 @@
       })
       .then(response => {
         if (response.ok) {
-          window.location.href = 'thankyou.html';
+          window.location.href = 'thankyou.html';  // แสดงหน้า thank you เมื่อส่งข้อมูลสำเร็จ
         } else {
           alert("Failed to submit: " + response.statusText);
           submitButton.disabled = false;
