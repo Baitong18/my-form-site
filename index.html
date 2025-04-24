@@ -23,8 +23,10 @@
     form.addEventListener('submit', e => {
       e.preventDefault();
       fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-        .then(response => alert('ส่งข้อมูลเรียบร้อย'))
-        .catch(error => console.error('Error!', error.message));
+      .then(response => {
+        window.location.href = 'thankyou.html'; // 👉 เด้งไปหน้า Thank You
+      })
+      .catch(error => console.error('Error!', error.message));
     });
   </script>
 </body>
