@@ -3,27 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <title>Adobe Interest Form</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+    label { display: block; margin: 10px 0; }
+    input[type="text"], input[type="email"], input[type="tel"] { width: 100%; padding: 8px; }
+    button { background: #0066cc; color: white; border: none; padding: 10px 20px; cursor: pointer; }
+    button:disabled { background: #cccccc; }
+  </style>
 </head>
 <body>
+  <h1>Adobe Interest Form</h1>
   <form id="adobeForm">
-    <label>First Name: <input type="text" name="firstName" required></label><br>
-    <label>Last Name: <input type="text" name="lastName" required></label><br>
-    <label>Email: <input type="email" name="email" required></label><br>
-    <label>Mobile Phone: <input type="tel" name="phone" required></label><br>
-    <label>Company Name: <input type="text" name="company" required></label><br>
-    <label>Job Title: <input type="text" name="jobTitle" required></label><br>
+    <label>First Name: <input type="text" name="firstName" required></label>
+    <label>Last Name: <input type="text" name="lastName" required></label>
+    <label>Email: <input type="email" name="email" required></label>
+    <label>Mobile Phone: <input type="tel" name="phone" required></label>
+    <label>Company Name: <input type="text" name="company" required></label>
+    <label>Job Title: <input type="text" name="jobTitle" required></label>
 
-    <p>Would you be interested in any of the following topics (Select all that apply):</p>
-    <label><input type="checkbox" name="topics[]" value="Customer Journey Orchestration – Delivering personalized experiences across multiple channels"> Customer Journey Orchestration – Delivering personalized experiences across multiple channels</label><br>
-    <label><input type="checkbox" name="topics[]" value="Content Supply Chain & Automation – Scaling content creation and delivery efficiently"> Content Supply Chain & Automation – Scaling content creation and delivery efficiently</label><br>
-    <label><input type="checkbox" name="topics[]" value="Data-Driven Marketing – Leveraging AI and data insights to enhance customer engagement"> Data-Driven Marketing – Leveraging AI and data insights to enhance customer engagement</label><br>
-    <label><input type="checkbox" name="topics[]" value="Commerce & Personalization – Driving revenue growth with AI-powered recommendations"> Commerce & Personalization – Driving revenue growth with AI-powered recommendations</label><br>
-    <label><input type="checkbox" name="topics[]" value="Customer Data Platform (CDP) – Unifying customer data for better targeting and segmentation"> Customer Data Platform (CDP) – Unifying customer data for better targeting and segmentation</label><br>
-    <label><input type="checkbox" name="topics[]" value="Generative AI in Digital Experience – Exploring use cases and best practices"> Generative AI in Digital Experience – Exploring use cases and best practices</label><br>
-    <label><input type="checkbox" name="topics[]" value="Not at the moment"> Not at the moment</label><br><br>
+    <fieldset>
+      <legend>Would you be interested in any of the following topics (Select all that apply):</legend>
+      <label><input type="checkbox" name="topics" value="Customer Journey Orchestration"> Customer Journey Orchestration</label>
+      <label><input type="checkbox" name="topics" value="Content Supply Chain & Automation"> Content Supply Chain & Automation</label>
+      <label><input type="checkbox" name="topics" value="Data-Driven Marketing"> Data-Driven Marketing</label>
+      <label><input type="checkbox" name="topics" value="Commerce & Personalization"> Commerce & Personalization</label>
+      <label><input type="checkbox" name="topics" value="Customer Data Platform (CDP)"> Customer Data Platform (CDP)</label>
+      <label><input type="checkbox" name="topics" value="Generative AI in Digital Experience"> Generative AI in Digital Experience</label>
+      <label><input type="checkbox" name="topics" value="Not at the moment"> Not at the moment</label>
+    </fieldset>
 
     <p>
-      By supplying my contact information, I authorise the Adobe family of companies to contact me with personalised communications about Adobe’s products and services.  
+      By supplying my contact information, I authorise the Adobe family of companies to contact me with personalised communications about Adobe's products and services.  
       See our <a href="https://www.adobe.com/privacy.html" target="_blank">Privacy Policy</a> for more details or to opt-out at any time.
     </p>
 
@@ -34,48 +44,50 @@
 const scriptURL = 'https://script.google.com/macros/s/AKfycbx5Io0FxAJdwif6ZLFMJhGu4uBq3K_sncYQwoA0aBWxiR_dzNah0VRICRVMEDXYr1Fzag/exec';
 const form = document.getElementById('adobeForm');
 
-form.addEventListener('submit', e => {
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const submitButton = form.querySelector('button[type="submit"]');
-  submitButton.disabled = true;
-  submitButton.textContent = "Submitting...";
+  
+  try {
+    submitButton.disabled = true;
+    submitButton.textContent = "Submitting...";
 
-  const formData = new FormData(form);
-  const data = {
-    firstName: formData.get('firstName'),
-    lastName: formData.get('lastName'),
-    email: formData.get('email'),
-    phone: formData.get('phone'),
-    company: formData.get('company'),
-    jobTitle: formData.get('jobTitle'),
-    topics: formData.getAll('topics[]') // ใช้ getAll สำหรับ checkbox
-  };
+    // เก็บค่าจากฟอร์ม
+    const formData = new FormData(form);
+    const data = {
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+      company: formData.get('company'),
+      jobTitle: formData.get('jobTitle'),
+      topics: Array.from(formData.getAll('topics')) // เก็บทุกค่าที่เลือก
+    };
 
-fetch(scriptURL, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(data)
-})
-.then(response => {
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  return response.text();
-})
-.then(text => {
-  console.log('Success:', text);
-  alert("Submission successful!");
-})
-.catch(error => {
-  console.error('Error:', error);
-  alert("Submission failed: " + error.message);
-});
-  .finally(() => {
+    // ส่งข้อมูล
+    const response = await fetch(scriptURL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.text();
+    console.log('Success:', result);
+    alert("Thank you for your submission!");
+    form.reset();
+  } catch (error) {
+    console.error('Error:', error);
+    alert("Submission failed. Please try again later.");
+  } finally {
     submitButton.disabled = false;
     submitButton.textContent = "Submit";
-  });
+  }
 });
 </script>
 </body>
