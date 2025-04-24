@@ -41,11 +41,30 @@
       submitButton.disabled = true;
       submitButton.textContent = "Submitting...";
 
+      // ดึงข้อมูลจากฟอร์ม
       const formData = new FormData(form);
+  
+      // แปลงข้อมูลจาก FormData เป็น query string
+      const formDataObject = {};
+      formData.forEach((value, key) => {
+        if (key === 'topics') {
+          // ตรวจสอบว่ามีการเลือกหลาย checkbox หรือไม่
+          if (!formDataObject[key]) {
+            formDataObject[key] = [];
+          }
+          formDataObject[key].push(value);
+        } else {
+          formDataObject[key] = value;
+        }
+      });
 
+      // แปลง formDataObject เป็น query string
+      const formDataParams = new URLSearchParams(formDataObject).toString();
+
+      // ส่งข้อมูลไปยัง Google Apps Script
       fetch(scriptURL, {
         method: 'POST',
-        body: formData
+        body: formDataParams
       })
       .then(response => {
         if (response.ok) {
