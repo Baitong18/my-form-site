@@ -24,10 +24,12 @@
       e.preventDefault();
       fetch(scriptURL, { method: 'POST', body: new FormData(form)})
       .then(response => {
-        window.location.href = 'thankyou.html'; // 👉 เด้งไปหน้า Thank You
+        if (response.ok) {
+          window.location.href = 'thankyou.html'; // ✅ เด้งไปหน้า Thank You เมื่อส่งสำเร็จจริง
+        } else {
+          console.error('Submit failed. Status:', response.status);
+        }
       })
-      .catch(error => console.error('Error!', error.message));
-    });
   </script>
 </body>
 </html>
