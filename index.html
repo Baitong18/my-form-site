@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Form</title>
+</head>
+<body>
+  <form id="contact-form">
+    <input name="firstName" placeholder="First name" required>
+    <input name="lastName" placeholder="Last name" required>
+    <input name="email" type="email" placeholder="Business email" required>
+    <button type="submit">Submit</button>
+
+    <div class="footer-note">
+      By supplying my contact information, I authorise the Adobe family of companies...
+    </div>
+  </form>
+
+  <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbx5Io0FxAJdwif6ZLFMJhGu4uBq3K_sncYQwoA0aBWxiR_dzNah0VRICRVMEDXYr1Fzag/exec';
+    const form = document.getElementById('contact-form');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => alert('ส่งข้อมูลเรียบร้อย'))
+        .catch(error => console.error('Error!', error.message));
+    });
+  </script>
+</body>
+</html>
