@@ -40,33 +40,23 @@ form.addEventListener('submit', e => {
   submitButton.disabled = true;
   submitButton.textContent = "Submitting...";
 
-  // เก็บค่าจากฟอร์มแบบถูกต้อง
+  // สร้าง URLSearchParams จาก FormData โดยตรง
   const formData = new FormData(form);
-  const data = {};
+  const urlEncoded = new URLSearchParams();
   
-  // เก็บค่า checkbox แยกต่างหาก
-  const topics = [];
-  
+  // เพิ่มค่าแต่ละ field
   for (const [key, value] of formData.entries()) {
+    // สำหรับ checkbox (topics[]) ให้เพิ่มแต่ละค่าแยกกัน
     if (key === 'topics[]') {
-      topics.push(value);
+      urlEncoded.append('topics[]', value);
     } else {
-      data[key] = value;
+      urlEncoded.append(key, value);
     }
   }
-  
-  // เพิ่ม topics เข้าไปใน data
-  if (topics.length > 0) {
-    data['topics'] = topics;
-  }
 
-  // ส่งข้อมูลในรูปแบบที่ GAS รับได้
   fetch(scriptURL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams(data).toString(),
+    body: urlEncoded,
     mode: 'no-cors'
   })
   .then(() => {
